@@ -2,14 +2,13 @@
 import xml.etree.ElementTree as ET
 import re
 import string
+import os
+import time
+import glob
 import nltk
 import pdb
-import glob
-from joblib import Parallel, delayed
-import time
-import sys
-import os
 
+from joblib import Parallel, delayed
 
 tree1 = ET.parse('ProjectBiblicalTerms.xml')
 root1 = tree1.getroot()
@@ -92,14 +91,14 @@ def tag_format(code, verse_list):
         next_index = None
 
     if previous_index is not None:
-        previous_code = books[str(int(verse_list[previous_index][0:3]))] + ' ' + str(int(verse_list[previous_index][3:6])) + ':' + str(int(verse_list[previous_index][6:9]))
+        previous_code = ' Previous: ' + books[str(int(verse_list[previous_index][0:3]))] + ' ' + str(int(verse_list[previous_index][3:6])) + ':' + str(int(verse_list[previous_index][6:9]))
     else:
         previous_code = ''
     if next_index is not None:
-        next_code = books[str(int(verse_list[next_index][0:3]))] + ' ' + str(int(verse_list[next_index][3:6])) + ':' + str(int(verse_list[next_index][6:9]))
+        next_code = '; Next: ' + books[str(int(verse_list[next_index][0:3]))] + ' ' + str(int(verse_list[next_index][3:6])) + ':' + str(int(verse_list[next_index][6:9]))
     else:
         next_code = ''
-    formatted = "\\fSPT+SPT\\fr " + str(current_code) +" \\ft Previous: " + str(previous_code) + "; Next: " + str(next_code) + "\\ft*"
+    formatted = "\\fSPT+SPT\\fr " + str(current_code) +" \\ft" + str(previous_code) + str(next_code) + "\\f*"
     return formatted
 
 def verse_handler(code, verse):
